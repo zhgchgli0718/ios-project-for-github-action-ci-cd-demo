@@ -34,8 +34,8 @@ jobs:
             ${{ runner.os }}-spm-
 
       # Resolve dependencies
-      - name: Resolve dependencies
-        run: swift package resolve
+      # - name: Resolve dependencies
+      #   run: swift package resolve
 
       # Run tests
       - name: Run Tests
