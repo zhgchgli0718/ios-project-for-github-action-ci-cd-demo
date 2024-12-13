@@ -1,0 +1,56 @@
+# Job Name
+name: CI-PR-Testing
+
+# 觸發時機...
+on:
+  # 手動觸發
+  workflow_dispatch:
+  # or..
+  # Feature/Fix Branch 開 PR / 重開 PR / Commit to PR 時才會觸發 
+  pull_request:
+    types: 
+      - opened
+      - reopened
+      - synchronize
+    branches:
+      - 'feature/**'
+      - 'fix/**'
+      
+jobs:
+
+  test-job:
+    runs-on: macos-latest
+    steps:
+     - name: Checkout code
+        uses: actions/checkout@v3
+      # Cache Swift Package Manager dependencies
+      - name: Cache Swift Package Manager
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./SourcePackages
+          key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      # Resolve dependencies
+      - name: Resolve dependencies
+        run: swift package resolve
+
+      # Run tests
+      - name: Run Tests
+        run: |
+          xcodebuild -project iOS\ Project.xcodeproj \
+                     -scheme iOS\ ProjectTests \
+                     -destination 'platform=iOS Simulator,name=iPhone 14' \
+                     -resultBundlePath ./TestResults.xcresult \
+                     -clonedSourcePackagesDirPath SourcePackages \
+                     test
+
+      # Upload test results (optional)
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: TestResults
+          path: ./TestResults.xcresult
