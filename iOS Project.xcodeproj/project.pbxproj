@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -26,7 +26,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		1E7D5C3C2D086B7D0005D743 /* Exceptions for "iOS Project" folder in "iOS Project" target */ = {
+		1E7D5C3C2D086B7D0005D743 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -36,19 +36,8 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		1E7D5C162D086B7B0005D743 /* iOS Project */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				1E7D5C3C2D086B7D0005D743 /* Exceptions for "iOS Project" folder in "iOS Project" target */,
-			);
-			path = "iOS Project";
-			sourceTree = "<group>";
-		};
-		1E7D5C2D2D086B7D0005D743 /* iOS ProjectTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "iOS ProjectTests";
-			sourceTree = "<group>";
-		};
+		1E7D5C162D086B7B0005D743 /* iOS Project */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (1E7D5C3C2D086B7D0005D743 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "iOS Project"; sourceTree = "<group>"; };
+		1E7D5C2D2D086B7D0005D743 /* iOS ProjectTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "iOS ProjectTests"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +146,7 @@
 				};
 			};
 			buildConfigurationList = 1E7D5C0F2D086B7B0005D743 /* Build configuration list for PBXProject "iOS Project" */;
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -168,7 +158,6 @@
 			packageReferences = (
 				1E81E4352D0C6A20006D72AB /* XCRemoteSwiftPackageReference "ZMarkupParser" */,
 			);
-			preferredProjectObjectVersion = 77;
 			productRefGroup = 1E7D5C152D086B7B0005D743 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
