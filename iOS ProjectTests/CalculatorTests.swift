@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import iOS_Project
+@testable import iOS_CI_CD_Demo
 
 final class CalculatorTests: XCTestCase {
 
