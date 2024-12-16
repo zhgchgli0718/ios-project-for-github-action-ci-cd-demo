@@ -71,7 +71,7 @@ jobs:
         run: |
           xcodebuild -project iOS\ Project.xcodeproj \
                      -scheme iOS\ ProjectTests \
-                     -destination 'platform=iOS Simulator,name=iPhone 14' \
+                     -destination 'platform=iOS Simulator,name=iPhone 16' \
                      -resultBundlePath ./TestResults.xcresult \
                      -clonedSourcePackagesDirPath SourcePackages \
                      test
