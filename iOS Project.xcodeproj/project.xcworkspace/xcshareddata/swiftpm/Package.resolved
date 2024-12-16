@@ -1,10 +1,10 @@
 {
-  "originHash" : "6cdde5d911ae278d4a2bbe5fa710289fef7f999919a273dbdb473cbd169be422",
+  "originHash" : "ae0003ce0800ec4886d66d516e9a06bf709f79a67d8a1c116a07f89b46fddea9",
   "pins" : [
     {
       "identity" : "zmarkupparser",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ZhgChgLi/ZMarkupParser.git",
+      "location" : "https://github.com/ZhgChgLi/ZMarkupParser",
       "state" : {
         "branch" : "main",
         "revision" : "f25c9838e9e77ae49cc3f434ee26e669cb4043c7"

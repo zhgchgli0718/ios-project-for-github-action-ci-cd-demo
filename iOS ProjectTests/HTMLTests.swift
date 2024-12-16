@@ -22,6 +22,6 @@ final class HTMLTests: XCTestCase {
         let htmlString = "<b>Hello World</b>"
         let result = HTMLParser.parse(htmlString)
         
-        XCTAssertTrue((result.attribute(.font, at: 0, effectiveRange: nil) as? UIFont)?.fontDescriptor.symbolicTraits.contains(.traitBold))
+        XCTAssertTrue((result.attribute(.font, at: 0, effectiveRange: nil) as? UIFont)?.fontDescriptor.symbolicTraits.contains(.traitBold) ?? false)
     }
 }
