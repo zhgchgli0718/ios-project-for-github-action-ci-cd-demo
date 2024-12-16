@@ -19,7 +19,7 @@ on:
 jobs:
 
   test-job:
-    runs-on: macos-latest
+    runs-on: macos-14-large
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
