@@ -79,9 +79,8 @@ jobs:
           bundle exec fastlane tests
 
       # Upload test results (optional)
-      - name: Upload Test Results
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
         if: always()
-        uses: actions/upload-artifact@v3
         with:
-          name: TestResults
-          path: ./test_result
+          report_paths: "./test_result/*.junit"
