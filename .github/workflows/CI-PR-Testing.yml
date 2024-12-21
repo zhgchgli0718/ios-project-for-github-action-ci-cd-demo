@@ -61,20 +61,12 @@ jobs:
           key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
           restore-keys: |
             ${{ runner.os }}-spm-
-
-      # Resolve dependencies
-      # - name: Resolve dependencies
-      #   run: swift package resolve
+      - name: Install Dependencies
+        run: bundle install
 
       # Run tests
       - name: Run Tests
-        run: |
-          xcodebuild -project iOS\ Project.xcodeproj \
-                     -scheme iOS\ ProjectTests \
-                     -destination 'platform=iOS Simulator,name=iPhone 16' \
-                     -resultBundlePath ./TestResults.xcresult \
-                     -clonedSourcePackagesDirPath SourcePackages \
-                     test
+        run: bundle exec fastlane tests
 
       # Upload test results (optional)
       - name: Upload Test Results
@@ -82,4 +74,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: TestResults
-          path: ./TestResults.xcresult
+          path: ./test_result
