@@ -61,12 +61,23 @@ jobs:
           key: ${{ runner.os }}-spm-${{ hashFiles('**/Package.resolved') }}
           restore-keys: |
             ${{ runner.os }}-spm-
-      - name: Install Dependencies
-        run: bundle install
 
-      # Run tests
-      - name: Run Tests
-        run: bundle exec fastlane tests
+      # 2. Set up Ruby environment
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0  # Specify Ruby version compatible with your Gemfile
+          bundler-cache: true # Enables caching of installed gems
+
+      # 3. Install dependencies via Bundler
+      - name: Install Gems
+        run: |
+          bundle install
+
+      # 4. Run Fastlane (example task)
+      - name: Run Fastlane
+        run: |
+          bundle exec fastlane tests
 
       # Upload test results (optional)
       - name: Upload Test Results
