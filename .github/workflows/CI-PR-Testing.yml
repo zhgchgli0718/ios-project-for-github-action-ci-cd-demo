@@ -25,7 +25,7 @@ on:
 
 # Publish Test Report 需要 checks writ 權限
 # assign-author-to-self 需要 pull-requests write 權限
-# 或十直接到 Repo -> Settings -> Actions -> General -> Workflow permissions -> 改成 Read and write permissions
+# 或直接到 Repo -> Settings -> Actions -> General -> Workflow permissions -> 改成 Read and write permissions
 permissions:
   checks: write
   pull-requests: write
@@ -123,6 +123,6 @@ jobs:
       # 打上 Checks 測試結果
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v4
-        if: always()
+        if: success() || failure()
         with:
           report_paths: "./test_result/*.junit"
