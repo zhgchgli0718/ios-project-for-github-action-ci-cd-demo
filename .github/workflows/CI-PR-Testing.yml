@@ -147,7 +147,7 @@ jobs:
           commit_sha: "${{ github.event.pull_request.head.sha }}"
           creator: "${{ github.payload.pull_request.user.login || github.actor }}"
           action_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}"
-          test_is_success: ${{ steps.test-step.outcome == "success" }}
+          test_is_success: ${{ steps.test-step.outcome == 'success' }}
           test_results: ${{ steps.test-results.outputs['test-results'] }}
         with:
             script: |
