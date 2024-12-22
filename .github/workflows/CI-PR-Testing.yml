@@ -23,7 +23,9 @@ on:
     branches: # base branch
       - 'main'
 
-# 打上 Checks 測試結果 需要 writ 權限
+# Publish Test Report 需要 checks writ 權限
+# assign-author-to-self 需要 pull-requests write 權限
+# 或十直接到 Repo -> Settings -> Actions -> General -> Workflow permissions -> 改成 Read and write permissions
 permissions:
   checks: write
   pull-requests: write
@@ -31,14 +33,15 @@ permissions:
 # 任務
 # 並發執行
 jobs:
+
   # 開 PR 時如果沒 Assign，自動 Assign 成作者自己：
   assign-author-to-self:
     # job 是 pr open 觸發才執行
     if: github.event_name == 'pull_request' && github.event.action == 'opened'
-    # 即使這 Job 失敗也不影響其他 Job 執行
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
+      # 直接用別人封裝好的功能
+      # ref: https://github.com/toshimaru/auto-author-assign
       - uses: toshimaru/auto-author-assign@v2.1.1
       
   # 測試任務
@@ -107,7 +110,7 @@ jobs:
           ruby-version: 2.7.5 # Specify Ruby version compatible with your Gemfile
           bundler-cache: true # Enables caching of installed gems
 
-      # 構建程序安裝 (e.g. Fastlane)
+      # Gems 依賴安裝 (e.g. Fastlane)
       - name: Install Gems
         run: |
           bundle install
