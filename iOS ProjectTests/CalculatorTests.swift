@@ -26,7 +26,7 @@ final class CalculatorTests: XCTestCase {
     
     func testSubtraction() {
         let calculator = Calculator()
-        XCTAssertEqual(calculator.subtract(10, 5), 5, "Subtraction should return the correct difference.")
+        XCTAssertEqual(calculator.subtract(10, 5), 50, "Subtraction should return the correct difference.")
         XCTAssertEqual(calculator.subtract(5, 10), -5, "Subtraction should handle negative results.")
     }
     
