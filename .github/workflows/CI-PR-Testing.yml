@@ -49,7 +49,7 @@ jobs:
     # 使用 Github Cloud Runner, MacOS v15 機器執行
     # ref: https://github.com/actions/runner-images
     # [注意] Cloud Runner 如果非 Public Repo 需要計費
-    runs-on: self-hosted
+    runs-on: macos-15
 
     # 最長執行時間，預設是 360 (6 小時)
     # 超過會強迫終止
