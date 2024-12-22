@@ -22,29 +22,16 @@ permissions:
 # 任務
 # 並發執行
 jobs:
-  # 通知任務
-  start-message:
+  # 開 PR 時如果沒 Assign，自動 Assign 成作者自己：
+  assign-author-to-self:
     # job 是 pr open 觸發才執行
     if: github.event_name == 'pull_request' && github.event.action == 'opened'
+    # 即使這 Job 失敗也不影響其他 Job 執行
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - name: comment start message
-        uses: actions/github-script@v6
-        env:
-          commit_sha: "${{ github.event.pull_request.head.sha }}"
-          action_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}"
-          creator: "${{ github.event.pull_request.user.login || github.actor }}"
-        with:
-            script: |
-              const { commit_sha, action_url, creator } = process.env
-              // Could also get the context variable by using context.xxx
-              // e.g. creator = context.payload.pull_request.user.login || context.actor
-              github.rest.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: context.issue.number,
-                  body: `Testing started...\n\nCommit: ${commit_sha}, Author: @${creator}\nAction: ${action_url}`
-              })
+      - uses: toshimaru/auto-author-assign@v2.1.1
+      
   # 測試任務
   test-job:
     # 使用 Github Cloud Runner, MacOS v15 機器執行
