@@ -6,7 +6,7 @@ run-name: "[${{ github.workflow }}-Self-Hosted] ${{ github.event.pull_request.ti
 
 # 同個 Group 如果有新的 Job 會取消正在跑的
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }-Self-Hosted}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-Self-Hosted
   cancel-in-progress: true
 
 # 觸發時機...
