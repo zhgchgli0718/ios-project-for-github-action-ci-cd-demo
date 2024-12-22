@@ -25,9 +25,8 @@ on:
 
 # 打上 Checks 測試結果 需要 writ 權限
 permissions:
-  contents: read
   checks: write
-  id-token: write
+  pull-requests: write
 
 # 任務
 # 並發執行
