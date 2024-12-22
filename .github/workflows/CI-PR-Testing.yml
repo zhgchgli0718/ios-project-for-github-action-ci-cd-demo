@@ -11,9 +11,6 @@ concurrency:
 
 # 觸發時機...
 on:
-  # 手動觸發
-  workflow_dispatch:
-  # or..
   # 開 PR / 重開 PR / Commit to PR 時才會觸發 & Base branch(合併目標) 是 main
   pull_request:
     types: 
@@ -33,7 +30,6 @@ permissions:
 # 任務
 # 並發執行
 jobs:
-
   # 開 PR 時如果沒 Assign，自動 Assign 成作者自己：
   assign-author-to-self:
     # job 是 pr open 觸發才執行
@@ -116,13 +112,64 @@ jobs:
           bundle install
 
       # 執行 Fastlane 測試任務
+      # 請參考專案目錄下 ./fastlane/Fastfile
       - name: Run Fastlane
+        id: test-step
         run: |
           bundle exec fastlane tests
 
       # 打上 Checks 測試結果
       - name: Publish Test Report
+        # 直接用別人封裝好的功能
+        # 解析 .junit 報告並打上 Checks Annotations
+        # https://github.com/mikepenz/action-junit-report
         uses: mikepenz/action-junit-report@v4
         if: success() || failure()
         with:
           report_paths: "./test_result/*.junit"
+
+      # 解析測試結果成變數
+      - name: Parse Test Results
+        # 直接用別人封裝好的功能
+        # 解析 .junit 報告轉換成變數共後續步驟使用
+        # https://github.com/zestia/junit-results-toolkit
+        uses: zestia/junit-results-toolkit@v2
+        id: test-results
+        if: success() || failure()
+        with:
+          files: "./test_result/*.junit"
+
+      # Comment Test Result to PR
+      - name: test-result-comment
+        if: (success() || failure()) && github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        env:
+          commit_sha: "${{ github.event.pull_request.head.sha }}"
+          creator: "${{ github.payload.pull_request.user.login || github.actor }}"
+          action_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}"
+          test_is_success: ${{ steps.test-step.outcome == "success" }}
+          test_results: ${{ steps.test-results.outputs['test-results'] }}
+        with:
+            script: |
+              const { commit_sha, creator, action_url, test_is_success, test_results } = process.env
+              // Could also get the context variable by using context.xxx
+              // e.g. creator = context.payload.pull_request.user.login || context.actor
+              var resultTable = "";
+              if (test_results) {
+                const resultSummary = fromJson(test_results).summary;
+                resultTable = `<table><tr><th>Tests</th><th>Duration</th><th>Passed ✅</th><th>Skipped ⏭️</th><th>Failed ❌</th></tr><tr><td>${{ resultSummary.tests }} ran</td><td>${{ resultSummary.duration }} secs</td><td>${{ resultSummary.passed }} passed</td><td>${{ resultSummary.skipped }} skipped</td><td>${{ resultSummary.failed }} failed</td></tr></table>`;
+              }
+
+              var body = "";
+              if (test_is_success) {
+                body = `## 測試成功✅\n\n${resultTable}\n\nCommit: ${commit_sha}, Author: @${creator}\nAction: ${action_url}`;
+              } else {
+                body = `## 測試失敗❌\n\n${resultTable}\n\nCommit: ${commit_sha}, Author: @${creator}\nAction: ${action_url}`;
+              }
+
+              github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              })
