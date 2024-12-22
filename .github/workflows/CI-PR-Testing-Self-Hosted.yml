@@ -24,11 +24,9 @@ on:
       - 'main'
 
 # Publish Test Report 需要 checks writ 權限
-# assign-author-to-self 需要 pull-requests write 權限
 # 或直接到 Repo -> Settings -> Actions -> General -> Workflow permissions -> 改成 Read and write permissions
 permissions:
   checks: write
-  pull-requests: write
 
 # 任務
 # 並發執行
@@ -36,7 +34,7 @@ jobs:
   # 測試任務
   test-job:
     # 使用 self-hosted 自己的機器執行
-    runs-on: self-hosted
+    runs-on: ["self-hosted"] # runner label
 
     # 最長執行時間，預設是 360 (6 小時)
     # 超過會強迫終止
