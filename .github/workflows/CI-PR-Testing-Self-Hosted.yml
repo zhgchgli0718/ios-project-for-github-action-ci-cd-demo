@@ -34,7 +34,7 @@ jobs:
   # 測試任務
   test-job:
     # 使用 self-hosted 自己的機器執行
-    runs-on: ["self-hosted"] # runner label
+    runs-on: ["self-hosted"] # runner labels, and 條件，均符合才會用
 
     # 最長執行時間，預設是 360 (6 小時)
     # 超過會強迫終止
