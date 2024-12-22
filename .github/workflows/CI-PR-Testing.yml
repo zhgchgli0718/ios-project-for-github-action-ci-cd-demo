@@ -151,25 +151,43 @@ jobs:
           test_results: ${{ steps.test-results.outputs['test-results'] }}
         with:
             script: |
-              const { commit_sha, creator, action_url, test_is_success, test_results } = process.env
+              const { commit_sha, creator, action_url, test_results, test_is_success } = process.env;
               // Could also get the context variable by using context.xxx
-              // e.g. creator = context.payload.pull_request.user.login || context.actor
-              var resultTable = "";
-              if (test_results) {
-                const resultSummary = fromJson(test_results).summary;
-                resultTable = `<table><tr><th>Tests</th><th>Duration</th><th>Passed ✅</th><th>Skipped ⏭️</th><th>Failed ❌</th></tr><tr><td>${{ resultSummary.tests }} ran</td><td>${{ resultSummary.duration }} secs</td><td>${{ resultSummary.passed }} passed</td><td>${{ resultSummary.skipped }} skipped</td><td>${{ resultSummary.failed }} failed</td></tr></table>`;
-              }
+              // e.g. let creator = context.payload.pull_request.user.login || context.actor
 
-              var body = "";
-              if (test_is_success) {
+              let resultTable = "";
+              if (test_results) {
+                const resultSummary = JSON.parse(test_results).summary;
+                resultTable = `<table>
+                  <tr>
+                    <th>Tests</th>
+                    <th>Duration</th>
+                    <th>Passed ✅</th>
+                    <th>Skipped ⏭️</th>
+                    <th>Failed ❌</th>
+                  </tr>
+                  <tr>
+                    <td>${resultSummary.tests} ran</td>
+                    <td>${resultSummary.duration} secs</td>
+                    <td>${resultSummary.passed} passed</td>
+                    <td>${resultSummary.skipped} skipped</td>
+                    <td>${resultSummary.failed} failed</td>
+                  </tr>
+                </table>`;
+              }
+        
+              // 構建 PR 評論的內容
+              let body = "";
+              if (test_is_success === "true") {
                 body = `## 測試成功✅\n\n${resultTable}\n\nCommit: ${commit_sha}, Author: @${creator}\nAction: ${action_url}`;
               } else {
                 body = `## 測試失敗❌\n\n${resultTable}\n\nCommit: ${commit_sha}, Author: @${creator}\nAction: ${action_url}`;
               }
-
-              github.rest.issues.createComment({
+        
+              // 創建 GitHub PR 評論
+              await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
                 body: body
-              })
+              });
