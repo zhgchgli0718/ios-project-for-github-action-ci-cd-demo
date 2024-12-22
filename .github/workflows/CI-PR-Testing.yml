@@ -148,7 +148,7 @@ jobs:
           creator: "${{ github.payload.pull_request.user.login || github.actor }}"
           action_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}/attempts/${{ github.run_attempt }}"
           test_is_success: ${{ steps.test-step.outcome == 'success' }}
-          test_results: ${{ steps.test-results.outputs['test-results'] }}
+          test_results: ${{ steps.test-results.outputs['test-results'] && fromJson(steps.test-results.outputs['test-results']) }}
         with:
             script: |
               const { commit_sha, creator, action_url, test_is_success, test_results } = process.env
@@ -156,7 +156,7 @@ jobs:
               // e.g. creator = context.payload.pull_request.user.login || context.actor
               var resultTable = "";
               if (test_results) {
-                const resultSummary = fromJson(test_results).summary;
+                const resultSummary = test_results.summary;
                 resultTable = `<table><tr><th>Tests</th><th>Duration</th><th>Passed ✅</th><th>Skipped ⏭️</th><th>Failed ❌</th></tr><tr><td>${{ resultSummary.tests }} ran</td><td>${{ resultSummary.duration }} secs</td><td>${{ resultSummary.passed }} passed</td><td>${{ resultSummary.skipped }} skipped</td><td>${{ resultSummary.failed }} failed</td></tr></table>`;
               }
 
