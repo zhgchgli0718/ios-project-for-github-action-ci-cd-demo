@@ -1,0 +1,13 @@
+name: UseCase-archive
+
+env:
+  SIMULATOR_VERSION: "iOS 16"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  some-job:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "${{ env.SIMULATOR_VERSION }}"
