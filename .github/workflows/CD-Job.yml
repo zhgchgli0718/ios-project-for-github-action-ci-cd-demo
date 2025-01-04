@@ -1,0 +1,43 @@
+# CD 打包工作
+
+name: CD-Job
+
+on:
+  workflow_dispatch:
+    inputs:
+      RELEASE_VERSION:
+        description: '版本號碼'
+        required: false
+        type: string
+      RELEASE_BUILD_NUMBER:
+        description: '建置編號'
+        required: false
+        type: string
+      RELEASE_NOTE:
+        description: '版本變動訊息'
+        required: false
+        type: string
+      TESTFLIGHT:
+        description: 'Testflight 版？'
+        required: false
+        type: boolean
+        default: true
+      Configuration:
+        description: '建置環境'
+        default: 'Release'
+        type: choice
+        options:
+          - Release
+          - Debug
+      
+jobs:
+  some-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Inputs
+        run: |
+          echo "Release Version: ${{ github.event.inputs.RELEASE_VERSION }}"
+          echo "Release Build Number: ${{ github.event.inputs.RELEASE_BUILD_NUMBER }}"
+          echo "Release Note: ${{ github.event.inputs.RELEASE_NOTE }}"
+          echo "Testflight: ${{ github.event.inputs.TESTFLIGHT }}"
+          echo "Configuration: ${{ github.event.inputs.Configuration }}"
