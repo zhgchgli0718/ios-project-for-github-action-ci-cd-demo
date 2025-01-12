@@ -23,6 +23,22 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Run tests for iOS Project
 
+### ios archive
+
+```sh
+[bundle exec] fastlane ios archive
+```
+
+
+
+### ios deploy_to_firebase
+
+```sh
+[bundle exec] fastlane ios deploy_to_firebase
+```
+
+
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

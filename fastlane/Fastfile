@@ -15,6 +15,12 @@
 
 default_platform(:ios)
 
+SCHEME = "iOS Project"
+XCODEPROJ = "iOS Project.xcodeproj"
+OUTPUT_DIRECTORY = "./build"
+OUTPUT_NAME = "myApp.ipa"
+FIREBASE_APP_ID = "1:790047303990:ios:39ee2c8f578a057620eb97"
+
 platform :ios do
   desc "Run tests for iOS Project"
   lane :tests do
@@ -23,6 +29,39 @@ platform :ios do
       output_directory: "./test_result/",
       project: "iOS Project.xcodeproj",
       cloned_source_packages_path: "./SourcePackages"
+    )
+  end
+
+  lane :archive do |options|
+    export_method = options[:export_method] || "development"
+    build_number = options[:build_number]
+
+    if !build_number.nil?
+      increment_build_number(
+        build_number: build_number,
+        xcodeproj: XCODEPROJ
+      )
+    else
+      increment_build_number(xcodeproj: XCODEPROJ)
+    end
+
+    gym(
+      scheme: SCHEME,
+      export_method: export_method,
+      output_directory: OUTPUT_DIRECTORY,
+      output_name: OUTPUT_NAME
+    )
+  end
+
+  lane :deploy_to_firebase do |options|
+    release_notes = options[:release_notes]
+    firebase_cli_token = ENV["FIREBASE_CLI_TOKEN"] || options[:firebase_cli_token]
+
+    firebase_app_distribution(
+      app: FIREBASE_APP_ID,
+      firebase_cli_token: firebase_cli_token,
+      ipa_path: "#{OUTPUT_DIRECTORY}/#{OUTPUT_NAME}",
+      release_notes: release_notes
     )
   end
 end
